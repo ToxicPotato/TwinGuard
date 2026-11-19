@@ -1,0 +1,96 @@
+.wrap {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--bdr);
+  flex-shrink: 0;
+}
+
+.sectionLabel {
+  font-family: var(--fui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--txlo);
+  margin-bottom: 12px;
+}
+
+.idle {
+  font-family: var(--fmono);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--txlo);
+  padding: 12px;
+  border: 1px dashed var(--bdr);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.statusBlock {
+  padding: 14px 16px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.statusBlock.pending {
+  background: rgba(255, 160, 0, 0.06);
+  border: 1px solid rgba(255, 160, 0, 0.35);
+  animation: pulse-orange 1.2s infinite;
+}
+
+.statusBlock.active {
+  background: rgba(255, 48, 96, 0.06);
+  border: 1px solid rgba(255, 48, 96, 0.35);
+  animation: pulse-red 0.9s infinite;
+}
+
+.statusBlock.pendingVs {
+  background: rgba(0, 229, 255, 0.05);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  animation: pulse-orange 1.2s infinite;
+}
+
+.statusBlock.activeVs {
+  background: rgba(0, 229, 255, 0.07);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+}
+
+.statusBlock.pendingVs .statusType,
+.statusBlock.activeVs  .statusType  { color: var(--s0); }
+.statusBlock.pendingVs .statusCountdown,
+.statusBlock.activeVs  .statusCountdown { color: var(--s0); }
+
+.statusType {
+  font-family: var(--fui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.statusBlock.pending .statusType { color: #ffa000; }
+.statusBlock.active  .statusType { color: var(--red); }
+
+.statusCountdown {
+  font-family: var(--fmono);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.statusBlock.pending .statusCountdown { color: #ffa000; }
+.statusBlock.active  .statusCountdown { color: var(--red); }
+
+.statusMeta {
+  font-family: var(--fmono);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--txlo);
+  line-height: 1.5;
+}
+
+.statusMeta span {
+  color: var(--tx);
+}

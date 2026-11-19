@@ -1,0 +1,12 @@
+# TwinGuard experiment pipeline dependencies
+# Install with: pip install -r experiments/requirements.txt
+
+# YAML config parsing (required for run_campaign.py)
+pyyaml>=6.0
+
+# Thesis-ready plot generation (required for plots.py)
+matplotlib>=3.8
+
+# pandas is already available in the backend venv and used by analyze_campaign.py
+# only if running outside that venv:
+# pandas>=2.2

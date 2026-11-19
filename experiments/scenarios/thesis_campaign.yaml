@@ -1,0 +1,200 @@
+# TwinGuard Thesis Experiment Campaign
+# Run with: python experiments/run_campaign.py --config experiments/scenarios/thesis_campaign.yaml
+#
+# Timeline per attack scenario:
+#   t=0               recording starts
+#   t=warmup_s        runner calls attack endpoint (attack.delay_s passed to API)
+#   t=warmup_s+delay  tamper-service fires the attack
+#   t=...+duration_s  attack ends naturally
+#   t=...+recovery_s  recording stops
+#
+# Total per run ≈ warmup_s + attack.delay_s + attack.duration_s + recovery_s
+# Baseline runs record for their own duration_s.
+
+campaign_id: thesis_m5_detection_campaign
+repetitions: 5
+warmup_s: 15        # runner-side wait after recording start before calling attack API
+recovery_s: 20      # additional recording time after expected attack end
+pre_run_settle_s: 3 # after reset, wait for backend/tamper/live state to become clean
+backend_url: http://localhost:8000
+random_seed: 1337   # deterministic seed; override at runtime with --seed <n>
+
+scenarios:
+
+  # ── G0: Clean baseline ──────────────────────────────────────────────────────
+  - id: baseline_clean
+    label: "Clean platooning baseline"
+    attack: ~
+    duration_s: 60
+
+  # ── G1: False brake ─────────────────────────────────────────────────────────
+  - id: false_brake_short
+    label: "False brake injection — 8 s burst"
+    attack:
+      type: false_brake
+      delay_s: 0
+      duration_s: 8
+      target_robot: Fridjof
+
+  - id: false_brake_medium
+    label: "False brake injection — 15 s burst"
+    attack:
+      type: false_brake
+      delay_s: 0
+      duration_s: 15
+      target_robot: Fridjof
+
+  - id: false_brake_long
+    label: "False brake injection — 25 s burst"
+    attack:
+      type: false_brake
+      delay_s: 0
+      duration_s: 25
+      target_robot: Fridjof
+
+  # ── G2: Velocity spoof — static ─────────────────────────────────────────────
+  - id: velocity_spoof_static_low
+    label: "Static velocity spoof — low deviation (0.15 m/s)"
+    attack:
+      type: velocity_spoof
+      mode: static
+      speed_mps: 0.15
+      delay_s: 0
+      duration_s: 15
+      target_robot: Fridjof
+
+  - id: velocity_spoof_static_medium
+    label: "Static velocity spoof — medium deviation (0.30 m/s)"
+    attack:
+      type: velocity_spoof
+      mode: static
+      speed_mps: 0.30
+      delay_s: 0
+      duration_s: 15
+      target_robot: Fridjof
+
+  - id: velocity_spoof_static_high
+    label: "Static velocity spoof — high deviation (0.50 m/s)"
+    attack:
+      type: velocity_spoof
+      mode: static
+      speed_mps: 0.50
+      delay_s: 0
+      duration_s: 15
+      target_robot: Fridjof
+
+  # ── G3: Velocity spoof — ramp ────────────────────────────────────────────────
+  - id: velocity_spoof_ramp_slow
+    label: "Ramp velocity spoof — slow ramp (0.40 → 0.10 m/s)"
+    attack:
+      type: velocity_spoof
+      mode: ramp
+      speed_start: 0.40
+      speed_end: 0.10
+      delay_s: 0
+      duration_s: 20
+      target_robot: Fridjof
+
+  - id: velocity_spoof_ramp_fast
+    label: "Ramp velocity spoof — fast ramp (0.40 -> 0.05 m/s)"
+    attack:
+      type: velocity_spoof
+      mode: ramp
+      speed_start: 0.40
+      speed_end: 0.05
+      delay_s: 0
+      duration_s: 20
+      target_robot: Fridjof
+
+  # ── G4: Randomized scenarios ─────────────────────────────────────────────────
+  # delay_s and duration_s are sampled fresh each repetition from the given
+  # ranges.  The resolved values are recorded in manifest.json under
+  # randomized_parameters and resolved_attack_request so every run is
+  # reproducible with the campaign seed.
+  - id: velocity_spoof_static_low_randomized
+    label: "Static velocity spoof — low deviation, randomized timing"
+    attack:
+      type: velocity_spoof
+      mode: static
+      speed_mps: 0.15
+      target_robot: Fridjof
+      randomize:
+        delay_s:
+          min: 5
+          max: 25
+        duration_s:
+          min: 5
+          max: 20
+
+  # Difficulty sweep: lower deviation and shorter duration should make the
+  # detector less likely to fire, revealing its sensitivity boundary.
+  - id: velocity_spoof_sweep_easy
+    label: "Difficulty sweep - easy spoof"
+    attack:
+      type: velocity_spoof
+      mode: static
+      target_robot: Fridjof
+      randomize:
+        speed_mps:
+          min: 0.65
+          max: 0.80
+        delay_s:
+          min: 5
+          max: 20
+        duration_s:
+          min: 8
+          max: 15
+
+  - id: velocity_spoof_sweep_medium
+    label: "Difficulty sweep - medium spoof"
+    attack:
+      type: velocity_spoof
+      mode: static
+      target_robot: Fridjof
+      randomize:
+        speed_mps:
+          min: 0.85
+          max: 0.93
+        delay_s:
+          min: 5
+          max: 20
+        duration_s:
+          min: 4
+          max: 8
+
+  - id: velocity_spoof_sweep_hard
+    label: "Difficulty sweep - near-threshold spoof"
+    attack:
+      type: velocity_spoof
+      mode: static
+      target_robot: Fridjof
+      randomize:
+        speed_mps:
+          min: 0.94
+          max: 1.02
+        delay_s:
+          min: 5
+          max: 20
+        duration_s:
+          min: 1
+          max: 4
+
+  - id: velocity_spoof_sweep_ramp_subtle
+    label: "Difficulty sweep - subtle ramp spoof"
+    attack:
+      type: velocity_spoof
+      mode: ramp
+      target_robot: Fridjof
+      randomize:
+        speed_start:
+          min: 0.96
+          max: 1.02
+        speed_end:
+          min: 0.88
+          max: 0.96
+        delay_s:
+          min: 5
+          max: 20
+        duration_s:
+          min: 3
+          max: 8

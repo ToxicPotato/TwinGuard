@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv*/
+venv/
+
+# Node
+node_modules/
+
+# Unreal generated
+Unreal/**/Saved/
+Unreal/**/Intermediate/
+Unreal/**/Binaries/
+Unreal/Windows/
+Unreal/**/Build/
+**/DerivedDataCache/
+
+# Visual Studio IDE files
+**/.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.VC.opendb
+*.ipch
+
+# Generated output (recordings, experiment results, reports)
+visualization/output/
+visualization/report-service/output/
+
+
+# Local tool settings
+.claude/
+graphify-out/

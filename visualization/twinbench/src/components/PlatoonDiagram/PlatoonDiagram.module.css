@@ -1,0 +1,47 @@
+.wrap {
+  padding: 14px 24px 12px;
+  border-bottom: 1px solid var(--bdr);
+  flex-shrink: 0;
+  background: var(--pan2);
+}
+
+.label {
+  font-family: var(--fui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--txlo);
+  margin-bottom: 10px;
+}
+
+.svg {
+  width: 100%;
+  height: 90px;
+  display: block;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 72px;
+  font-family: var(--fmono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--txlo);
+  border: 1px dashed var(--bdr);
+  border-radius: 4px;
+}
+
+.directionLabel {
+  font-family: var(--fmono);
+  font-size: 8px;
+  fill: var(--txlo);
+  letter-spacing: 1px;
+}
+
+.componentSep {
+  stroke: var(--bdr2);
+  stroke-dasharray: 3 3;
+}

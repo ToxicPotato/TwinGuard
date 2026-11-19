@@ -1,0 +1,188 @@
+.wrap {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--bdr);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex-shrink: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sectionLabel {
+  font-family: var(--fui);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  color: var(--txlo);
+}
+
+.headerState {
+  color: var(--txlo);
+  font-family: var(--fmono);
+  font-size: 9px;
+  letter-spacing: 1.2px;
+}
+
+.statusRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  padding: 5px 9px;
+  border: 1px solid var(--bdr);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.statusText {
+  font-family: var(--fmono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+}
+
+.idle {
+  color: var(--txlo);
+}
+
+.active {
+  color: var(--red);
+  border-color: rgba(255, 48, 96, 0.35);
+  background: rgba(255, 48, 96, 0.07);
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.metaBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.metaLabel {
+  font-family: var(--fmono);
+  font-size: 9px;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: var(--txlo);
+}
+
+.metaValue {
+  font-family: var(--fmono);
+  font-size: 11px;
+  color: var(--tx);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fieldLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-family: var(--fmono);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: var(--tx);
+}
+
+.optional {
+  color: var(--txlo);
+}
+
+.fieldInput {
+  width: 100%;
+  background: var(--pan);
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: var(--txhi);
+  font-family: var(--fmono);
+  font-size: 11px;
+  outline: none;
+}
+
+.fieldInput:focus {
+  border-color: var(--s0);
+}
+
+.liveNote {
+  font-family: var(--fmono);
+  font-size: 10px;
+  color: var(--txlo);
+  line-height: 1.35;
+}
+
+.liveNote span {
+  color: var(--tx);
+}
+
+.error {
+  border: 1px solid rgba(255, 48, 96, 0.25);
+  background: rgba(255, 48, 96, 0.08);
+  color: #ff8ca6;
+  border-radius: 6px;
+  padding: 7px 9px;
+  font-family: var(--fmono);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.actions {
+  display: flex;
+}
+
+.actionBtn {
+  width: 100%;
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  padding: 9px 10px;
+  font-family: var(--fmono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.actionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.startBtn {
+  color: var(--green);
+  border-color: rgba(0, 255, 136, 0.28);
+  background: rgba(0, 255, 136, 0.05);
+}
+
+.startBtn:hover:not(:disabled) {
+  background: rgba(0, 255, 136, 0.1);
+}
+
+.stopBtn {
+  color: #ff9bb2;
+  border-color: rgba(255, 48, 96, 0.32);
+  background: rgba(255, 48, 96, 0.08);
+}
+
+.stopBtn:hover:not(:disabled) {
+  background: rgba(255, 48, 96, 0.12);
+}

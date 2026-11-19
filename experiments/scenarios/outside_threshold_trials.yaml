@@ -1,0 +1,112 @@
+# TwinGuard Outside-Threshold Sanity Trial Configuration
+#
+# Purpose:
+#   Evaluate whether TwinGuard stays stable on simple attacks it should detect.
+#   This is intentionally not a strategy-diversity experiment.
+#
+# Run with:
+#   python experiments/run_within_threshold_trials.py
+#
+# Attack mix:
+#   - velocity_spoof: plain static speed injection sampled outside threshold
+#   - false_brake: one simple fixed-duration brake injection
+#   - no_attack: clean negative controls
+#
+# Excluded on purpose:
+#   micro_spoof, near_threshold, ramp, pulse, dropout, and other variants.
+
+experiment_id: outside_threshold_trials
+backend_url: http://localhost:8000
+random_seed: 2024
+
+warmup_s: 5           # clean pre-attack period in EVERY trial (paper: N = 5 s); > 3 s startup-ignore window
+recovery_s: 3
+pre_run_settle_s: 1
+
+baseline_stability_timeout_s: 10
+baseline_stability_window_s: 1
+
+formation_thresholds:
+  max_lane_error_m: 0.30
+  max_spacing_error_m: 0.50
+  min_violation_duration_s: 2.0
+
+clean_baseline:
+  enabled: true
+  timeout_s: 10
+  poll_s: 0.5
+  require_no_live_alerts: true
+  require_no_current_velocity_spoof: true
+  on_timeout: warn_and_continue
+  use_probe_recording: false
+  baseline_probe_s: 3
+
+platoon_state_gate:
+  enabled: true
+  allowed_target_states: [3]
+  timeout_s: null
+  poll_s: 0.5
+  reset_on_mismatch: true
+  on_timeout: warn_and_continue
+  recheck_before_attack: true
+
+attack_generator:
+
+  # Logical followers under test.  The request compiler maps each follower to its
+  # upstream leader topic target (Fridjof -> Bjarte, Torleif -> Fridjof).
+  target_robots: [Fridjof, Torleif]
+
+  # The outside-threshold runner cycles through this list by trial number. This
+  # prevents short runs from accidentally missing a family due to random chance.
+  family_sequence:
+    - velocity_spoof
+    - false_brake
+    - velocity_spoof
+    - false_brake
+    - no_attack
+
+  family_probabilities:
+    velocity_spoof: 0.70
+    false_brake: 0.20
+    no_attack: 0.10
+
+  # Keep timing simple while allowing different sampled values.
+  timing:
+    delay_s:
+      min: 0
+      max: 0
+    duration_s:
+      min: 2
+      max: 8
+
+  velocity_spoof:
+
+    strategy_probabilities:
+      constant: 1.0
+
+    # Default speed range for Fridjof (leader = Bjarte at ~1.0 m/s).
+    # Sampled speeds are at least 0.10 m/s below nominal.
+    speed_mps:
+      min: 0.80
+      max: 0.90
+
+    # Per-robot overrides.  Torleif's leader is Fridjof (~0.80–0.95 m/s), so
+    # the 0.80–0.90 default range would land near its natural leader speed and
+    # produce near-zero discrepancy.  Use a much lower range instead.
+    speed_mps_by_target:
+      Torleif:
+        min: 0.40
+        max: 0.60
+
+    threshold_context:
+      threshold_mps: 0.05
+      reference_speed_mps: 1.0
+      expected_detectability: should_detect
+
+  false_brake:
+    strategy_label: simple_brake
+    duration_s:
+      min: 1
+      max: 5
+    threshold_applicability: not_velocity_threshold_based
+    expected_detectability: control_attack_not_velocity_threshold

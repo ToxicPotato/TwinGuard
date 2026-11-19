@@ -1,0 +1,181 @@
+# TwinGuard Continuous Randomized Adversarial Trial Configuration
+#
+# Run with:
+#   python experiments/run_randomized_trials.py \
+#       --config experiments/scenarios/randomized_trials.yaml
+#
+# The experiment uses an algorithmic adversarial attack generator rather than
+# a fixed scenario list.  Each trial samples a fresh attack strategy from
+# configurable probability distributions and parameter bounds, enabling
+# empirical evaluation of detection coverage across a broader attack space.
+#
+# Timing per trial:
+#   t=0              recording starts
+#   t=warmup_s       runner calls POST /attack/<type>  (with delay_s in body)
+#   t=warmup_s
+#     +delay_s       tamper-service fires the attack
+#   t=...+duration_s attack expires
+#   t=...+recovery_s recording stops
+#   (pre_run_settle_s is consumed BEFORE starting the next trial's recording)
+
+experiment_id: randomized_adversarial_trials
+backend_url: http://localhost:8000
+random_seed: 1337
+
+warmup_s: 3           # applied only to the first trial of a session; 0 for all subsequent trials
+recovery_s: 3         # short post-attack observation window for faster sampling
+pre_run_settle_s: 1   # wait after reset before each trial begins
+
+# How long to wait for the platoon to return to baseline before declaring
+# the inter-trial stabilisation failed (a warning is logged; the trial
+# still proceeds because formation data comes from the recording itself).
+baseline_stability_timeout_s: 10
+baseline_stability_window_s: 1
+
+formation_thresholds:
+  max_lane_error_m: 0.30
+  max_spacing_error_m: 0.50
+  min_violation_duration_s: 2.0
+
+# ── Clean baseline gate ──────────────────────────────────────────────────────────
+#
+# Before each trial's recording starts, the runner verifies that the live
+# risk/detector state shows no active or pending velocity_spoof activity.
+# This prevents stale detector state from a previous trial bleeding into the
+# next recording and producing false pre_attack_detection=True results.
+#
+# What "attack status idle" vs "clean live state" means:
+#   attack status idle   = tamper-service has no active/pending injection command
+#   clean live state     = /risk/system and /risk/alerts report no current live
+#                          velocity_spoof risk object or active velocity_spoof alert
+#   historical risk      = prior-trial NIST findings raise the weighted score;
+#                          this is expected after attack trials and does NOT block
+#
+# on_timeout options:
+#   warn_and_continue   -> log a warning, proceed anyway (may still contaminate)
+#
+# use_probe_recording: run a short recording and check for anomaly_frames > 0.
+#   Useful when the detector's rolling buffer needs time to flush.
+#   Disabled by default to avoid overhead; enable for environments with a long
+#   detector buffer window.
+
+clean_baseline:
+  enabled: true
+  timeout_s: 10
+  poll_s: 0.5
+  require_no_live_alerts: true
+  require_no_current_velocity_spoof: true
+  on_timeout: warn_and_continue
+  use_probe_recording: false
+  baseline_probe_s: 3
+
+# Target-state gate:
+# Attacks are only triggered when the sampled target is in a platoon-control
+# state. State 3 is PLATOONING; state 4 is RECOVERY. While the target is in any
+# other state, the runner resets attack/tamper state and pauses here. Restart
+# the simulation and turn platooning on again; the runner resumes automatically
+# when the selected target returns to an allowed state.
+platoon_state_gate:
+  enabled: true
+  allowed_target_states: [3, 4]
+  timeout_s: null
+  poll_s: 0.5
+  reset_on_mismatch: true
+  on_timeout: warn_and_continue
+
+# ── Attack generator ────────────────────────────────────────────────────────────
+#
+# Each trial independently samples:
+#   1. attack family    from family_probabilities
+#   2. target robot     from target_robots
+#   3. global timing    from timing.delay_s / timing.duration_s
+#   4. strategy         from velocity_spoof.strategy_probabilities
+#   5. magnitude/shape  from family- and strategy-specific bounds
+#
+# pulse is orchestrated by the experiment runner as repeated static
+# velocity_spoof windows, so it is part of the normal randomized trial set.
+
+attack_generator:
+
+  target_robots: [Fridjof, Torleif]
+
+  family_probabilities:
+    velocity_spoof: 0.70
+    false_brake: 0.20
+    no_attack: 0.10     # clean recording; any detection counts as a false positive
+
+  # Global timing bounds.  false_brake.duration_s overrides timing.duration_s
+  # for false_brake trials.
+  timing:
+    delay_s:
+      min: 0
+      max: 2
+    duration_s:
+      min: 2
+      max: 8
+
+  # ── velocity_spoof strategy section ─────────────────────────────────────────
+
+  velocity_spoof:
+
+    strategy_probabilities:
+      constant:    0.30   # fixed speed static spoof
+      ramp:        0.25   # linearly changing speed
+      micro_spoof: 0.15   # very small deviation, sustained; always attack_difficulty=hard
+      pulse:       0.15   # rapid on/off cycles
+      dropout:     0.15   # speed reports zero
+
+    # constant: speed sampled uniformly from [min, max]
+    speed_mps:
+      min: 0.05
+      max: 1.05
+
+    # ramp: start and end speed sampled independently
+    ramp:
+      start_mps:
+        min: 0.70
+        max: 1.05
+      end_mps:
+        min: 0.30
+        max: 1.00
+
+    # pulse: multi-cycle on/off attack executed by the experiment runner.
+    pulse:
+      pulse_count:
+        min: 2
+        max: 4
+      duty_cycle:
+        min: 0.2
+        max: 0.8
+      low_speed_mps:
+        min: 0.0
+        max: 0.5
+      high_speed_mps:
+        min: 0.8
+        max: 1.2
+
+    # micro_spoof: small sustained deviation below/near detection sensitivity.
+    # Kept as a hard-case attack, unlike near_threshold which is excluded from
+    # the randomized mix.
+    micro_spoof:
+      duration_s:
+        min: 1.5
+        max: 5.0
+      deviation_mps:
+        min: 0.01
+        max: 0.08
+      direction_probabilities:
+        underreport: 0.6
+        overreport: 0.4
+
+    # dropout: speed_mps fixed at this value (zero -> no movement reported)
+    dropout:
+      speed_mps: 0.0
+
+  # ── false_brake strategy section ─────────────────────────────────────────────
+  # duration_s here overrides timing.duration_s for false_brake trials.
+
+  false_brake:
+    duration_s:
+      min: 1
+      max: 5

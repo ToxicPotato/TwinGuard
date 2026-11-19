@@ -1,0 +1,290 @@
+.wrap {
+  padding: 20px 24px;
+}
+
+/* ── Mode toggle ──────────────────────────────────────────────────────────── */
+.modeToggle {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+  border: 1px solid var(--bdr2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.modeBtn {
+  flex: 1;
+  height: 32px;
+  background: transparent;
+  border: none;
+  color: var(--txlo);
+  font-family: var(--fui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.modeBtn + .modeBtn {
+  border-left: 1px solid var(--bdr2);
+}
+
+.modeBtn.active {
+  background: rgba(0, 229, 255, 0.1);
+  color: var(--s0);
+}
+
+.modeBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Fields ───────────────────────────────────────────────────────────────── */
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fieldLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-family: var(--fui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--txlo);
+}
+
+.fieldOpt {
+  font-family: var(--fmono);
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.6;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.fieldInput {
+  height: 34px;
+  padding: 0 12px;
+  background: var(--pan2);
+  border: 1px solid var(--bdr2);
+  border-radius: 4px;
+  color: var(--txhi);
+  font-family: var(--fmono);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.12s;
+  width: 100%;
+}
+
+.fieldInput:focus { border-color: var(--s0); }
+.fieldInput:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.fieldSelect {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235e7f9e'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 30px;
+}
+
+.fieldSelect option { background: #0d1628; }
+
+/* ── Sub-mode toggle (absolute / delta) ──────────────────────────────────── */
+.subToggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--bdr);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.subBtn {
+  flex: 1;
+  height: 28px;
+  background: transparent;
+  border: none;
+  color: var(--txlo);
+  font-family: var(--fmono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.subBtn + .subBtn {
+  border-left: 1px solid var(--bdr);
+}
+
+.subBtn.active {
+  background: rgba(0, 229, 255, 0.08);
+  color: var(--s0);
+}
+
+.subBtn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ── Delta block ──────────────────────────────────────────────────────────── */
+.deltaBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.deltaHint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--pan2);
+  border: 1px solid var(--bdr);
+  border-radius: 4px;
+  font-family: var(--fmono);
+  font-size: 11px;
+}
+
+.deltaFrom { color: var(--txlo); }
+.deltaArrow { color: var(--bdr2); font-size: 13px; }
+.deltaTo { color: var(--s0); font-weight: bold; }
+.deltaTo.deltaWarn { color: var(--yel); }
+.deltaMeta { color: var(--txlo); font-size: 9px; margin-left: auto; letter-spacing: 0.5px; }
+
+.deltaStaleWarn {
+  padding: 6px 12px;
+  background: rgba(255, 224, 64, 0.05);
+  border: 1px solid rgba(255, 224, 64, 0.25);
+  border-radius: 4px;
+  font-family: var(--fmono);
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  color: var(--yel);
+  line-height: 1.5;
+}
+
+.deltaNoData {
+  padding: 7px 12px;
+  background: rgba(255, 48, 96, 0.04);
+  border: 1px solid rgba(255, 48, 96, 0.2);
+  border-radius: 4px;
+  font-family: var(--fmono);
+  font-size: 10px;
+  color: var(--red);
+  opacity: 0.8;
+}
+
+/* ── Allow reverse toggle ─────────────────────────────────────────────────── */
+.reverseToggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--fmono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--txlo);
+  cursor: pointer;
+  user-select: none;
+}
+
+.reverseToggle input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  accent-color: var(--yel);
+  flex-shrink: 0;
+}
+
+.reverseToggle input:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Ramp inputs ──────────────────────────────────────────────────────────── */
+.rampRow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: end;
+}
+
+.rampArrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 4px;
+  color: var(--txlo);
+  font-size: 16px;
+}
+
+/* ── Ramp SVG preview ─────────────────────────────────────────────────────── */
+.rampPreview {
+  width: 100%;
+  max-width: 360px;
+  height: 52px;
+  display: block;
+  border: 1px solid var(--bdr);
+  border-radius: 4px;
+  background: var(--pan2);
+}
+
+/* ── Hint ─────────────────────────────────────────────────────────────────── */
+.hint {
+  font-family: var(--fmono);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: var(--txlo);
+  margin-top: -4px;
+}
+
+.hint span { color: var(--s0); }
+
+/* ── Error / actions ─────────────────────────────────────────────────────── */
+.error {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: var(--fmono);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  background: rgba(255, 48, 96, 0.06);
+  border: 1px solid rgba(255, 48, 96, 0.25);
+  color: var(--red);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.btn {
+  flex: 1;
+  height: 38px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--fui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.btnFire {
+  background: rgba(0, 229, 255, 0.06);
+  border-color: var(--s0);
+  color: var(--s0);
+}
+.btnFire:hover:not(:disabled) { background: rgba(0, 229, 255, 0.18); }
+
+.btnStop {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--bdr2);
+  color: var(--tx);
+}
+.btnStop:hover:not(:disabled) { border-color: var(--red); color: var(--red); }

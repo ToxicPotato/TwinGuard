@@ -1,0 +1,71 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--bdr);
+}
+
+/* ── Tab bar ──────────────────────────────────────────────────────────────── */
+.tabBar {
+  display: flex;
+  border-bottom: 1px solid var(--bdr);
+  flex-shrink: 0;
+}
+
+.tab {
+  flex: 1;
+  position: relative;
+  height: 42px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--txlo);
+  font-family: var(--fui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tab + .tab {
+  border-left: 1px solid var(--bdr);
+}
+
+.tab:hover {
+  color: var(--tx);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tabActive {
+  color: var(--s0);
+  border-bottom-color: var(--s0);
+  background: rgba(0, 229, 255, 0.04);
+}
+
+/* ── Live indicator dot ───────────────────────────────────────────────────── */
+.tabDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dotPending {
+  background: #ffa000;
+  animation: pulse-orange 1s infinite;
+}
+
+.dotActive {
+  background: var(--red);
+  animation: pulse-red 0.6s infinite;
+}
+
+/* ── Body ─────────────────────────────────────────────────────────────────── */
+.body {
+  flex: 1;
+}

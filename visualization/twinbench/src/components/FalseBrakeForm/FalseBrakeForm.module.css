@@ -1,0 +1,105 @@
+.wrap {
+  padding: 20px 24px;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fieldLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-family: var(--fui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--txlo);
+}
+
+.fieldOpt {
+  font-family: var(--fmono);
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.6;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.fieldInput {
+  height: 34px;
+  padding: 0 12px;
+  background: var(--pan2);
+  border: 1px solid var(--bdr2);
+  border-radius: 4px;
+  color: var(--txhi);
+  font-family: var(--fmono);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.12s;
+  width: 100%;
+}
+
+.fieldInput:focus { border-color: var(--red); }
+.fieldInput:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.fieldSelect {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235e7f9e'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 30px;
+}
+
+.fieldSelect option { background: #0d1628; }
+
+.error {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: var(--fmono);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  background: rgba(255, 48, 96, 0.06);
+  border: 1px solid rgba(255, 48, 96, 0.25);
+  color: var(--red);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.btn {
+  flex: 1;
+  height: 38px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--fui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.btnFire {
+  background: rgba(255, 48, 96, 0.1);
+  border-color: var(--red);
+  color: var(--red);
+}
+.btnFire:hover:not(:disabled) { background: rgba(255, 48, 96, 0.22); }
+
+.btnStop {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--bdr2);
+  color: var(--tx);
+}
+.btnStop:hover:not(:disabled) { border-color: var(--s0); color: var(--s0); }

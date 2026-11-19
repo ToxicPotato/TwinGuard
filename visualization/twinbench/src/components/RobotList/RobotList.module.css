@@ -1,0 +1,165 @@
+.wrap {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.sectionLabel {
+  font-family: var(--fui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--txlo);
+  flex-shrink: 0;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card {
+  background: var(--pan2);
+  border: 1px solid var(--bdr);
+  border-radius: 5px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: border-color 0.15s;
+}
+
+.card.attacked {
+  border-color: var(--red);
+  background: rgba(255, 48, 96, 0.06);
+}
+
+.card.armed {
+  border-color: #ffa000;
+  background: rgba(255, 160, 0, 0.05);
+}
+
+.card.spoofSrc {
+  border-color: rgba(255, 224, 64, 0.4);
+  background: rgba(255, 224, 64, 0.03);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.robotId {
+  font-family: var(--fui);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--txhi);
+}
+
+.stateBadge {
+  font-family: var(--fmono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid currentColor;
+  opacity: 0.85;
+  white-space: nowrap;
+}
+
+.cardRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rowLabel {
+  font-family: var(--fmono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--txlo);
+  text-transform: uppercase;
+}
+
+.rowValue {
+  font-family: var(--fmono);
+  font-size: 12px;
+  color: var(--txhi);
+}
+
+.attackTag {
+  font-family: var(--fmono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--red);
+  border: 1px solid rgba(255, 48, 96, 0.4);
+  background: rgba(255, 48, 96, 0.08);
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-align: center;
+  animation: pulse-red 0.8s infinite;
+}
+
+.armedTag {
+  font-family: var(--fmono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #ffa000;
+  border: 1px solid rgba(255, 160, 0, 0.4);
+  background: rgba(255, 160, 0, 0.08);
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-align: center;
+  animation: pulse-orange 1s infinite;
+}
+
+.spoofTag {
+  font-family: var(--fmono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 224, 64, 0.7);
+  border: 1px solid rgba(255, 224, 64, 0.25);
+  background: rgba(255, 224, 64, 0.05);
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.scenarioWarnTag {
+  font-family: var(--fmono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--red);
+  border: 1px solid rgba(255, 48, 96, 0.4);
+  background: rgba(255, 48, 96, 0.08);
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-align: center;
+  animation: pulse-red 0.8s infinite;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  font-family: var(--fmono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--txlo);
+  border: 1px dashed var(--bdr);
+  border-radius: 4px;
+}

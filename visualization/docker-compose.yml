@@ -1,0 +1,70 @@
+services:
+
+  
+  tamper-service:
+    build:
+      context: ./tamper-service
+      dockerfile: Dockerfile
+    environment:
+      TAMPER_MQTT_HOST: ${TG_MQTT_HOST:-host.docker.internal}
+      TAMPER_MQTT_PORT: ${TG_MQTT_PORT:-1883}
+      TAMPER_MQTT_USERNAME: ${TG_MQTT_USERNAME:-}
+      TAMPER_MQTT_PASSWORD: ${TG_MQTT_PASSWORD:-}
+      TAMPER_INPUT_TOPIC: ${TG_MQTT_TOPIC:-vehicle/+/#}
+      TAMPER_OUTPUT_PREFIX: actions
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      TG_MQTT_HOST: ${TG_MQTT_HOST:-host.docker.internal}
+      TG_MQTT_PORT: ${TG_MQTT_PORT:-1883}
+      TG_MQTT_USERNAME: ${TG_MQTT_USERNAME:-}
+      TG_MQTT_PASSWORD: ${TG_MQTT_PASSWORD:-}
+      TG_MQTT_TOPIC: ${TG_MQTT_TOPIC:-vehicle/+/#}
+      TG_TAMPER_API_URL: http://tamper-service:8001
+    volumes:
+      - ./output:/app/output
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      timeout: 4s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+  report-service:
+    build:
+      context: .
+      dockerfile: report-service/Dockerfile
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./report-service/output:/app/reportservice/output
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+  twinbench:
+    build:
+      context: ./twinbench
+      dockerfile: Dockerfile
+    ports:
+      - "5174:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
